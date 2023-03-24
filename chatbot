@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    // 存储知识库
+    map<string, string> knowledge_base;
+    knowledge_base["什么是机器学习？"] = "机器学习是一种通过数据训练计算机模型的方法，以实现人工智能。";
+    knowledge_base["什么是神经网络？"] = "神经网络是一种类似于人脑的计算机算法，它通过模拟大量神经元之间的连接，从而实现学习和决策。";
+    knowledge_base["什么是深度学习？"] = "深度学习是一种机器学习的分支，它使用深度神经网络来处理和分析大量复杂数据。";
+
+    // 输入问题并回答
+    while (true) {
+        cout << "请输入您的问题（输入\"退出\"结束程序）：" << endl;
+        string question;
+        getline(cin, question);
+        if (question == "退出") {
+            break;
+        }
+        // 匹配关键词
+        map<string, string>::iterator it;
+        string best_match;
+        int best_match_score = 0;
+        for (it = knowledge_base.begin(); it != knowledge_base.end(); ++it) {
+            string::size_type pos = it->first.find(question);
+            if (pos != string::npos) {
+                int score = it->first.length() - pos;
+                if (score > best_match_score) {
+                    best_match_score = score;
+                    best_match = it->first;
+                }
+            }
+        }
+        // 回答问题
+        if (best_match_score > 0) {
+            cout << "我猜您想问的是：" << best_match << endl;
+            cout << "答案是：" << knowledge_base[best_match] << endl;
+        } else {
+            cout << "抱歉，我不知道答案。" << endl;
+        }
+    }
+
+    return 0;
+}
